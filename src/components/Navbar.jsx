@@ -3,6 +3,7 @@ import logo from "../assets/logo.jpg";
 
 export default function Navbar() {
   const [active, setActive] = useState("home");
+  const [menuOpen, setMenuOpen] = useState(false); // ✅ For mobile menu
   const navItems = ["home", "about", "gallery", "contact"];
 
   useEffect(() => {
@@ -26,24 +27,25 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // ✅ Updated smooth scroll with dynamic navbar height
+  // ✅ Smooth Scroll with navbar height
   const handleSmoothScroll = (id) => {
     const section = document.getElementById(id);
     const navbar = document.querySelector("nav");
 
     if (section && navbar) {
-      const navbarHeight = navbar.offsetHeight; // get actual navbar height
+      const navbarHeight = navbar.offsetHeight;
       const y =
         section.getBoundingClientRect().top +
         window.pageYOffset -
         navbarHeight;
 
       window.scrollTo({ top: y, behavior: "smooth" });
+      setMenuOpen(false); // close menu after clicking (mobile)
     }
   };
 
   return (
-    <nav className="bg-gradient-to-r from-gold to-brown text-white shadow-md fixed top-0 left-0 right-0 z-50">
+    <nav className="bg-gradient-to-r from-yellow-600 to-red-700 text-white shadow-md fixed top-0 left-0 right-0 z-50">
       <div className="max-w-6xl mx-auto flex justify-between items-center px-4 py-2">
         {/* Logo */}
         <a
@@ -62,8 +64,8 @@ export default function Navbar() {
           Youth Red Cross
         </a>
 
-        {/* Nav links */}
-        <ul className="hidden md:flex gap-4 uppercase font-medium text-sm">
+        {/* Desktop Nav links */}
+        <ul className="hidden md:flex gap-6 uppercase font-medium text-sm">
           {navItems.map((item) => (
             <li key={item}>
               <a
@@ -72,10 +74,10 @@ export default function Navbar() {
                   e.preventDefault();
                   handleSmoothScroll(item);
                 }}
-                className={`cursor-pointer hover:text-yellow-200 transition ${
+                className={`cursor-pointer transition ${
                   active === item
-                    ? "underline underline-offset-4 font-semibold"
-                    : ""
+                    ? "underline underline-offset-4 font-semibold text-yellow-200"
+                    : "hover:text-yellow-200"
                 }`}
               >
                 {item}
@@ -83,8 +85,41 @@ export default function Navbar() {
             </li>
           ))}
         </ul>
+
+        {/* Mobile menu button */}
+        <button
+          className="md:hidden text-2xl"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          ☰
+        </button>
       </div>
+
+      {/* Mobile Menu Dropdown */}
+      {menuOpen && (
+        <div className="md:hidden bg-gradient-to-r from-yellow-600 to-red-700 px-4 pb-4">
+          <ul className="flex flex-col gap-4 uppercase font-medium text-sm">
+            {navItems.map((item) => (
+              <li key={item}>
+                <a
+                  href={`#${item}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleSmoothScroll(item);
+                  }}
+                  className={`block cursor-pointer transition ${
+                    active === item
+                      ? "underline underline-offset-4 font-semibold text-yellow-200"
+                      : "hover:text-yellow-200"
+                  }`}
+                >
+                  {item}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </nav>
   );
 }
-
