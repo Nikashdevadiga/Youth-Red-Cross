@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/react"
 import './index.css'; // or './App.css' depending on your setup
 import Navbar from "./components/Navbar";
 import Home from "./components/Home";
