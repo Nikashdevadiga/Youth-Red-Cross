@@ -15,7 +15,7 @@ export default function Coordinators() {
       name: "Suraj",
       role: "Vice Coordinator",
       photo: viceImg,
-      email: "suraj@example.com",
+      email: "suraj@gmail.com",
       phone: "+91 77604 21790",
     },
   ];
